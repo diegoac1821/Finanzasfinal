@@ -1,0 +1,27 @@
+.custom-toolbar {
+  background-color: #bcc851;
+  color: white;
+}
+.custom-menu-item {
+  color: black;
+  &:hover {
+   color: rgb(8, 138, 95);
+
+  }
+}
+mat-toolbar {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.mat-button {
+  display: inline-block;
+}
+@media (max-width: 768px) {
+  mat-toolbar {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+.right-menu {
+  margin-left: auto; /* Empuja el menú de usuarios a la derecha */
+}

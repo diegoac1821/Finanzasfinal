@@ -1,0 +1,18 @@
+<div class="register-container">
+  <h2>Crear una cuenta en Finansmart</h2>
+
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <input formControlName="username" type="text" placeholder="Nombre de usuario" />
+    <input formControlName="password" type="password" placeholder="Contraseña" />
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Selecciona tu rol</mat-label>
+      <mat-select formControlName="rol">
+        <mat-option value="CLIENTE">Cliente (Inversor)</mat-option>
+        <mat-option value="EMISOR">Emisor</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button class="btn-submit" type="submit" [disabled]="registerForm.invalid">Registrarse</button>
+  </form>
+</div>

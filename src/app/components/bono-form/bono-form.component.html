@@ -1,0 +1,252 @@
+<div class="styled-form">
+  <h2 class="form-title">📄 Registro de Bono Corporativo</h2>
+
+  <form [formGroup]="form">
+    <div class="form-grid">
+      <!-- Columna izquierda -->
+      <div class="form-column">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nombre del bono</mat-label>
+          <input matInput formControlName="nombre" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Monto nominal</mat-label>
+          <input
+            matInput
+            type="number"
+            min="0"
+            formControlName="montonominal"
+            (keydown)="bloquearSimbolos($event)"
+            (paste)="bloquearPegado($event)"
+          />
+          <mat-error
+            *ngIf="form.get('montonominal')?.hasError('montoInvalido')"
+          >
+            Solo se permite 1000, 2000, 3000, 4000 o 5000.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Moneda</mat-label>
+          <mat-select formControlName="moneda">
+            <mat-option *ngFor="let m of monedas" [value]="m">{{
+              m
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>TEA (%)</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="tasainteres"
+            min="0"
+            (keydown)="bloquearSimbolos($event)"
+            (paste)="bloquearPegado($event)"
+          />
+          <mat-error *ngIf="form.get('tasainteres')?.hasError('required')">
+            Este campo es obligatorio.
+          </mat-error>
+          <mat-error *ngIf="form.get('tasainteres')?.hasError('min')">
+            El valor mínimo permitido es 2%.
+          </mat-error>
+          <mat-error *ngIf="form.get('tasainteres')?.hasError('max')">
+            El valor máximo permitido es 12%.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Columna derecha -->
+      <div class="form-column">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Frecuencia de pago</mat-label>
+          <mat-select
+            formControlName="frecuenciapago"
+            (selectionChange)="generarPeriodos()"
+          >
+            <mat-option *ngFor="let f of frecuencias" [value]="f">{{
+              f
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Plazo en años</mat-label>
+          <input
+            matInput
+            type="number"
+            min="0"
+            formControlName="plazoanios"
+            (input)="generarPeriodos()"
+            (keydown)="bloquearSimbolos($event)"
+            (paste)="bloquearPegado($event)"
+          />
+          <mat-error *ngIf="form.get('plazoanios')?.hasError('min')">
+            El plazo debe ser de al menos 3 años.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>COK del mercado (TEA %)</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="tasaCOK"
+            min="0"
+            (keydown)="bloquearSimbolos($event)"
+            (paste)="bloquearPegado($event)"
+          />
+          <mat-error *ngIf="form.get('tasaCOK')?.hasError('required')">
+            Este campo es obligatorio.
+          </mat-error>
+          <mat-error *ngIf="form.get('tasaCOK')?.hasError('min')">
+            El valor mínimo permitido es 3%.
+          </mat-error>
+          <mat-error *ngIf="form.get('tasaCOK')?.hasError('max')">
+            El valor máximo permitido es 20%.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Fecha de emisión</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="fechaemision"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-buttons">
+      <button
+        mat-raised-button
+        color="primary"
+        type="button"
+        (click)="calcular()"
+        [disabled]="
+          form.invalid ||
+          form.get('montonominal')?.hasError('montoInvalido') ||
+          !validaPlazo()
+        "
+      >
+        📊 Calcular
+      </button>
+
+      <button
+        mat-raised-button
+        color="accent"
+        type="button"
+        (click)="guardar()"
+        [disabled]="form.invalid || !resultado"
+      >
+        💾 Guardar
+      </button>
+    </div>
+  </form>
+
+  <!-- Mensaje inicial -->
+  <div *ngIf="!resultado && flujos.length === 0" class="hint-text">
+    🛈 Complete el formulario y presione <strong>CALCULAR</strong> para ver el
+    flujo de caja.
+  </div>
+
+  <!-- Resultados -->
+  <div *ngIf="resultado" class="result-box">
+    <h3>📈 Resultado Financiero</h3>
+    <p *ngIf="!esCliente()">
+      <strong>TCEA:</strong> {{ resultado.tcea * 100 | number : "1.2-2" }}%
+    </p>
+    <p><strong>TREA:</strong> {{ resultado.trea * 100 | number : "1.2-2" }}%</p>
+    <p>
+      <strong>Duración:</strong> {{ resultado.duracion | number : "1.2-2" }}
+    </p>
+    <p>
+      <strong>Duración Modificada:</strong>
+      {{ resultado.duracion_modificada | number : "1.2-2" }}
+    </p>
+    <p>
+      <strong>Convexidad:</strong> {{ resultado.convexidad | number : "1.2-2" }}
+    </p>
+    <p>
+      <strong>💰 Precio de Mercado (COK aplicado):</strong>
+      {{ resultado.precio_mercado | currency : form.value.moneda }}
+    </p>
+    <p>
+      <strong>💡 Precio Máximo Teórico (COK = 0%):</strong>
+      {{ resultado.precio_maximo | currency : form.value.moneda }}
+    </p>
+  </div>
+
+  <mat-table
+    *ngIf="flujos.length > 0"
+    [dataSource]="flujos"
+    class="mat-elevation-z8 mt-4 flow-table"
+  >
+    <ng-container matColumnDef="periodo">
+      <th mat-header-cell *matHeaderCellDef>Periodo</th>
+      <td mat-cell *matCellDef="let f">{{ f.periodo }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="fecha_pago">
+      <th mat-header-cell *matHeaderCellDef>Fecha de pago</th>
+      <td mat-cell *matCellDef="let f">{{ f.fecha_pago | date }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="interes">
+      <th mat-header-cell *matHeaderCellDef>Interés</th>
+      <td mat-cell *matCellDef="let f">{{ f.interes | number : "1.2-2" }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="amortizacion">
+      <th mat-header-cell *matHeaderCellDef>Amortización</th>
+      <td mat-cell *matCellDef="let f">
+        {{ f.amortizacion | number : "1.2-2" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="cuotatotal">
+      <th mat-header-cell *matHeaderCellDef>Cuota total</th>
+      <td mat-cell *matCellDef="let f">
+        {{ f.cuotatotal | number : "1.2-2" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="saldo">
+      <th mat-header-cell *matHeaderCellDef>Saldo</th>
+      <td mat-cell *matCellDef="let f">{{ f.saldo | number : "1.2-2" }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="graciaPeriodo">
+      <th mat-header-cell *matHeaderCellDef>Gracia</th>
+      <td
+        mat-cell
+        *matCellDef="let f; let i = index"
+        [formGroup]="graciaFormArray.at(i)"
+      >
+        <ng-container *ngIf="i < 3; else emptyCell">
+          <mat-select
+            formControlName="tipo"
+            class="gracia-select"
+            disableRipple
+          >
+            <mat-option *ngFor="let g of gracias" [value]="g">{{
+              g
+            }}</mat-option>
+          </mat-select>
+        </ng-container>
+        <ng-template #emptyCell>
+          <span class="no-gracia">—</span>
+        </ng-template>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </mat-table>
+</div>

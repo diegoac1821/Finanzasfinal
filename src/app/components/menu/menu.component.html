@@ -1,0 +1,27 @@
+<mat-toolbar class="custom-toolbar" *ngIf="verificar()">
+  <div class="left-menu">
+    <button mat-button routerLink="/homes" class="no-shadow-button" style="color: white">
+      <mat-icon fontIcon="home"></mat-icon>Home
+    </button>
+    <button mat-button [matMenuTriggerFor]="menuBono" class="no-shadow-button" style="color: white" >
+      <mat-icon>insert_chart</mat-icon>Bono
+    </button>
+  </div>
+
+  <div class="right-menu">
+    <button mat-button [matMenuTriggerFor]="menuSalir" style="color: white">
+      <mat-icon>person</mat-icon><span>{{ userName }}</span>
+    </button>
+  </div>
+</mat-toolbar>
+
+<mat-menu #menuBono="matMenu">
+  <button mat-menu-item routerLink="/bono-form">Registrar Bono</button>
+</mat-menu>
+
+<mat-menu #menuSalir="matMenu">
+  <button mat-menu-item routerLink="/login" (click)="cerrar()" class="custom-menu-item">
+    <mat-icon>logout</mat-icon><span>Cerrar sesión</span>
+  </button>
+  <button mat-menu-item class="custom-menu-item">Rol: <span>{{ role }}</span></button>
+</mat-menu>

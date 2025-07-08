@@ -1,0 +1,56 @@
+:host {
+  display: block;
+  background-color: #e0f9b5; /* mismo fondo verde claro */
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Títulos */
+.titulo-principal {
+  color: #1b5e20;
+}
+
+.subtitulo {
+  color: #4e793f;
+}
+
+/* Caja destacada */
+.hero-box {
+  background: linear-gradient(to right, #aed581, #7cb342); /* gradiente verde */
+  color: white !important;
+  border-radius: 16px;
+}
+
+/* Tarjetas informativas */
+.card {
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-img-top {
+  object-fit: cover;
+  height: 180px;
+}
+
+.card-title {
+  font-weight: bold;
+  color: #33691e;
+}
+
+.card-text {
+  color: #424242;
+}
+
+.hover-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 100, 0, 0.2);
+}
+
+/* Footer */
+.footer-text {
+  color: #607d8b;
+}
