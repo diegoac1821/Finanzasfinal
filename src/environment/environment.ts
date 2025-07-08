@@ -1,4 +1,4 @@
 export const environment={
     production:false,
-    base:'https://finanzas-hkv2.onrender.com',
+    base:'https://finanzas-up3x.onrender.com',
 };

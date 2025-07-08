@@ -25,8 +25,8 @@ export const appConfig: ApplicationConfig = {
       JwtModule.forRoot({
         config: {
           tokenGetter: tokenGetter,
-          allowedDomains: ['finanzas-hkv2.onrender.com'],
-          disallowedRoutes: ['https://finanzas-hkv2.onrender.com/login/forget'],
+          allowedDomains: ['finanzas-up3x.onrender.com'],
+          disallowedRoutes: ['https://finanzas-up3x.onrender.com/login/forget'],
         },
       })
     ),

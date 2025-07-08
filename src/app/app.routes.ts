@@ -8,7 +8,7 @@ import { RegisterComponent } from './components/register/register.component';
 export const routes: Routes = [
    {
     path: '',
-    component: LandingpageComponent // 👈 ahora esta es la página principal
+    component: LandingpageComponent // 
   },
   {
     path: 'register',
