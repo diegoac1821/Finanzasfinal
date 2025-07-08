@@ -8,7 +8,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   providedIn: 'root',
 })
 export class LoginService {
-  private baseUrl = 'http://localhost:8080';
+  private baseUrl = 'https://finanzas-hkv2.onrender.com';
   private helper = new JwtHelperService();
 
   constructor(private http: HttpClient) {}

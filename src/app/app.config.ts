@@ -25,8 +25,8 @@ export const appConfig: ApplicationConfig = {
       JwtModule.forRoot({
         config: {
           tokenGetter: tokenGetter,
-          allowedDomains: ['localhost:8080'],
-          disallowedRoutes: ['http://localhost:8080/login/forget'],
+          allowedDomains: ['finanzas-hkv2.onrender.com'],
+          disallowedRoutes: ['https://finanzas-hkv2.onrender.com/login/forget'],
         },
       })
     ),
